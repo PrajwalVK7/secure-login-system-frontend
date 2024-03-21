@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { registerUserAPI } from '../services/allAPI';
 
 interface RegisterData {
     name:String;
@@ -20,7 +21,7 @@ function Register() {
         password: ""
     });
 
-    const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleRegister = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const {name,address,gender,username,password} = formData;
 
@@ -28,7 +29,23 @@ function Register() {
             alert("Please fill the form completely")
         }
         else{
-            alert("API")
+            const result:any =  await registerUserAPI(formData);
+            console.log(result)
+
+            if(result.status===200){
+                alert(result.data)
+            }
+            else{
+                if(result.response.data.errors&&result.response.data.errors.length>0){
+                    console.log(result.response.data)
+                    const errors = result.response.data.errors.map((error: any) => error.msg).join('\n\n');
+                        alert(errors);
+                }
+                else{
+                    alert(result.response.data)
+                }
+                
+            }
         }
     }
     
