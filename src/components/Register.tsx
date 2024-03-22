@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { registerUserAPI } from '../services/allAPI';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface RegisterData {
     name:String;
@@ -13,6 +14,7 @@ interface RegisterData {
 }
 function Register() {
 
+    const navigate = useNavigate()
     const [formData, setFormData] = useState<RegisterData>({
         name: "",
         address: "",
@@ -34,6 +36,8 @@ function Register() {
 
             if(result.status===200){
                 alert(result.data)
+                navigate('/')
+
             }
             else{
                 if(result.response.data.errors&&result.response.data.errors.length>0){
@@ -51,8 +55,10 @@ function Register() {
     
 
     return (
-        <div className='login-root d-flex justify-content-center align-items-center' style={{ height: '100vh' }}>
-            <div style={{ height: '20rem', width: '20rem' }}  >
+        <div className='  login-root d-flex justify-content-center align-items-center' style={{ height: '100vh' }}>
+            <div className='container' style={{  width: '30rem' }}  >
+            <h1 className='text-center text-white'>Signu up</h1>
+
             <Form className="p-3 rounded container" onSubmit={handleRegister}>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label>Name</Form.Label>
@@ -77,9 +83,15 @@ function Register() {
                         <Form.Control onChange={(e)=>setFormData({...formData,password:e.target.value})}  type="password" placeholder="Password" />
                     </Form.Group>
 
+                    <div className='d-flex justify-content-evenly '>
                     <Button variant="primary" type="submit">
                         Register
                     </Button>
+
+                    <div>
+                        <p>Already have account? <span className='text-primary'><Link to={'/'}><a >Login now</a></Link></span></p>
+                    </div>
+                    </div>
                 </Form>
             </div>
 
